@@ -1,0 +1,8 @@
+#IDE files
+.idea/
+
+#Credential file
+.edgerc
+
+# Dependency directories
+node_modules/
