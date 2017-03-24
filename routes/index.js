@@ -13,9 +13,6 @@ router.get('/', function(req, res, next) {
         i = i + 1;
       }
       strTeam = "<ul>" + strTeam + "</ul>";*/
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      });
       res.render('index', { title: 'Express',events: eventlist });
     //  res.write(template.build("Test web page on node.js", "Hello there", "<p>The teams in Group " + teamlist.GroupName + " for Euro 2012 are:</p>" + strTeam));
      res.end();
@@ -27,8 +24,6 @@ router.get('/', function(req, res, next) {
       res.end();
     }
   });
-};
-
 });
 
 module.exports = router;
