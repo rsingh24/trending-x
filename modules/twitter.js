@@ -8,8 +8,6 @@ var client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-var unirest = require("unirest");
-
 const NLP = require('google-nlp');
 //	Google Cloud API key
 const apiKey = process.env.GOOGLE_NLP_KEY;
