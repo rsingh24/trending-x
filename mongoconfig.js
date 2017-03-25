@@ -25,16 +25,16 @@ exports.eventlist = function(lon,lat,callback) {
                   	$near: [lon, lat],
                     $maxDistance: 1
                 }},
-                {date: {
-                    from:{
+                {
+                  "date.from":{
                       $lte: new Date()
                     }
-                }},
-                {date: {
-                    to:{
+                },
+                {
+                  "date.to":{
                       $gte: new Date()
                     }
-                }}
+                }
               ]
             }
           ).toArray(function(err, docs) {
@@ -144,26 +144,23 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
                     var currentSentiment = docs[0].social.twitter.sentiment;
                     var newCount= Number(currentCount)+1;
                     var newSentiment = Number(currentSentiment)+sentiment;
-                    collection.update(
-                      {
-                        social: {
-                        	twitter:{
-                            identifier: eventHandler
-                          }
-                        }
-                      },
-                      {
-                        social: {
-                        	twitter:{
-                            count: newCount
-                          }
+                      collection.update(
+                        {
+                          "social.twitter.identifier": eventHandler
+                            
                         },
-                        social: {
-                        	twitter:{
-                            sentiment: newSentiment
+                        {
+                          social: {
+                          	twitter:{
+                              count: newCount
+                            }
+                          },
+                          social: {
+                          	twitter:{
+                              sentiment: newSentiment
+                            }
                           }
-                        }
-                      });
+                        });
                 }
                   //strJson = '{' + strJson + '}';
 
