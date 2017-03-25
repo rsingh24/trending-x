@@ -14,28 +14,24 @@ exports.eventlist = function(lon,lat,callback) {
   console.log("I am here 1");
   db1.open(function(err, db) {
     if (!err) {
-      db.collection('events', function(err, collection) {
+      db  .collection('events', function(err, collection) {
         if (!err) {
           collection.find(
             {
-              loc: {
-                	$near: {
-                		$geometry: {
-                			type: 'Point',
-                			coordinates: [lon, lat],
-                			$maxDistance: 2000
-                		}
-                	}
-                }
+              location: {
+                	$near: [lon, lat],
+                  $maxDistance: 1
+              }
             }
           ).toArray(function(err, docs) {
             if (!err) {
               db.close();
               var intCount = docs.length;
+                console.log("I am here 2:"+intCount);
               if (intCount > 0) {
                 var strJson = "";
                 for (var i = 0; i < intCount;) {
-                  strJson += '{"EventName":"' + docs[i].name + '","lon":"' + docs[i].loc.coordinates[0] + '","lat":"' + docs[i].loc.coordinates[1] + '"}'
+                  strJson += '{"EventName":"' + docs[i].name + '","lon":"' + docs[i].location[0] + '","lat":"' + docs[i].location[1] + '"}';
                   i = i + 1;
                   if (i < intCount) {
                     strJson += ',';
@@ -46,6 +42,7 @@ exports.eventlist = function(lon,lat,callback) {
                 callback("", JSON.parse(strJson));
               }
             } else {
+              console.log("I am here 3");
               onErr(err, callback);
             }
           }); //end collection.find

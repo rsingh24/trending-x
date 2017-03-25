@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var mongo_data = require('../mongoconfig');
+var mongo_data = require('./mongoconfig');
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  mongo_data.eventlist(51.506479, -0.462224,function(err, eventlist){
+  mongo_data.eventlist(-0.462224,51.506479,function(err, eventlist){
     if (!err) {
       /*var strTeam = "",
         i = 0;
