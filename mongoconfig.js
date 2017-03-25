@@ -10,7 +10,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
 });
 exports.eventlist = function(lon,lat,callback) {
   console.log("I am here 1");
-  db.open(function(err, db) {
+  db.open(function(err, "heroku_hml06j14") {
     if (!err) {
       db.collection('events', function(err, collection) {
         if (!err) {
