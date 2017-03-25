@@ -84,8 +84,8 @@ exports.eventlist = function(lon,lat,callback) {
 };
 
 exports.getEventHandlers = function(callback) {
-  console.log("I am here 1");
-  db1.open(function(err, db) {
+  MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(err, db) {
+
     if (!err) {
       db.collection('events', function(err, collection) {
         if (!err) {
@@ -93,7 +93,7 @@ exports.getEventHandlers = function(callback) {
             if (!err) {
               db.close();
               var intCount = docs.length;
-                console.log("I am here 2:"+intCount);
+              //console.log("I am here 2:"+intCount);
               if (intCount > 0) {
                 var strJson = "";
                 for (var i = 0; i < intCount;) {
@@ -103,14 +103,13 @@ exports.getEventHandlers = function(callback) {
                     strJson += ',';
                   }
                 }
-                strJson = '{' + strJson + '}';
-                console.log("HEre1:"+strJson);
-                callback("", JSON.parse(strJson));
+                console.log('Event Handles: ' + strJson);
+                callback(strJson);
               }else{
-                callback("", "{}");
+                callback('');
               }
             } else {
-              console.log("I am here 3");
+              //console.log("I am here 3");
               onErr(err, callback);
             }
           }); //end collection.find
@@ -126,7 +125,7 @@ exports.getEventHandlers = function(callback) {
 
 exports.updateSentiments = function(eventHandler,sentiment,callback) {
   console.log("I am here 1");
-  db1.open(function(err, db) {
+  MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(err, db) {
     if (!err) {
       db.collection('events', function(err, collection) {
         if (!err) {
@@ -169,9 +168,6 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
                           }
                         });
                 }
-                  //strJson = '{' + strJson + '}';
-
-                  callback("","{}");
               }else {
               console.log("I am here 3");
               onErr(err, callback);
