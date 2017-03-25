@@ -13,6 +13,9 @@ MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(er
 
 exports.eventlist = function(lon,lat,radius,callback) {
   console.log("I am here 1"+lon+"-------"+lat);
+  if(typeof radius == "undefined" || radius == null){
+    radius=3;
+  }
 
   db1.open(function(err, db) {
     if (!err) {
@@ -24,7 +27,7 @@ exports.eventlist = function(lon,lat,radius,callback) {
                $and : [
                     {location:{
                     	$near: [lon, lat],
-                      $maxDistance: radius/3963.2
+                      $maxDistance: radius/70
                   }},
                   {
                     $or : [
@@ -54,7 +57,11 @@ exports.eventlist = function(lon,lat,radius,callback) {
                   var eventLon=docs[i].location[0];
                   var eventLat=docs[i].location[1];
                   var distance = haversine.getDistanceInMiles({'latitude':lat,'longitude':lon},{'latitude':eventLat,'longitude':eventLon})
-                  strJson += '{"EventName":"' + docs[i].name + '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiments + '","count":"' + docs[i].social.twitter.count + '"}';
+                  var image = docs[i].image;
+                  if(typeof image == "undefined" || image == null){
+                    image="https://static1.squarespace.com/static/553f0636e4b06aaabb2efa9e/t/554a6298e4b00a0f430cb80e/1430938277978/events+La+Boca.jpg?format=1000w";
+                  }
+                  strJson += '{"EventName":"' + docs[i].name + '","description":"' +docs[i].description + '","image":"' +image+ '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiments + '","count":"' + docs[i].social.twitter.count + '"}';
                   i = i + 1;
                   if (i < intCount) {
                     strJson += ',';
