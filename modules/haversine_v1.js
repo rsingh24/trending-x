@@ -4,8 +4,8 @@ const haversine = require('haversine')
 
 module.exports = {
     getDistanceInMiles: function(startCoordinates, endCoordinates) {
-        var distanceInMiles = haversine(start, end, {unit: 'mile'});
+        var distanceInMiles = haversine(startCoordinates, endCoordinates, {unit: 'mile'});
         console.log('Distance in Miles :' + distanceInMiles);
-        return haversine(start, end, {unit: 'mile'});
+        return haversine(startCoordinates, endCoordinates, {unit: 'mile'});
     }
 };

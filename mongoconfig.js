@@ -16,6 +16,7 @@ exports.eventlist = function(lon,lat,callback) {
 
   db1.open(function(err, db) {
     if (!err) {
+      console.log(new Date());
       db.collection('events', function(err, collection) {
         if (!err) {
           collection.find(
@@ -29,12 +30,12 @@ exports.eventlist = function(lon,lat,callback) {
                     $or : [
                     {
                     "date.from":{
-                        $gte: new Date()
+                        $gte: "2017-03-21T20:05:21.641Z"
                       }
                     },
                     {
                     "date.to":{
-                        $lte: new Date()
+                        $lte: "2017-03-27T20:05:21.641Z"
                       }
                     }
                   ]
