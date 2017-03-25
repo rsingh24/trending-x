@@ -67,6 +67,7 @@ exports.eventlist = function(lon,lat,callback) {
             }
           }); //end collection.find
         } else {
+            console.log(err);
           onErr(err, callback);
         }
       }); //end db.collection
