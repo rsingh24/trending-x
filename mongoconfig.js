@@ -14,7 +14,7 @@ exports.eventlist = function(lon,lat,callback) {
   console.log("I am here 1");
   db1.open(function(err, db) {
     if (!err) {
-      db  .collection('events', function(err, collection) {
+      db.collection('events', function(err, collection) {
         if (!err) {
           collection.find(
             {

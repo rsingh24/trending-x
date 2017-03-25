@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var mongo_data = require('./mongoconfig');
+var mongo_data = require('../mongoconfig');
 
 
 /* GET home page. */
