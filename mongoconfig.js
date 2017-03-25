@@ -49,7 +49,7 @@ exports.eventlist = function(lon,lat,callback) {
                   var eventLon=docs[i].location[0];
                   var eventLat=docs[i].location[1];
                   var distance = haversine.getDistanceInMiles({'latitude':lat,'longitude':lon},{'latitude':eventLat,'longitude':eventLon})
-                  strJson += '{"EventName":"' + docs[i].name + '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiment + '","count":"' + docs[i].social.twitter.count + '"}';
+                  strJson += '{"EventName":"' + docs[i].name + '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiments + '","count":"' + docs[i].social.twitter.count + '"}';
                   i = i + 1;
                   if (i < intCount) {
                     strJson += ',';
@@ -141,13 +141,13 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
                   //var strJson = "";
                   //for (var i = 0; i < intCount;) {
                     var currentCount = docs[0].social.twitter.count;
-                    var currentSentiment = docs[0].social.twitter.sentiment;
+                    var currentSentiment = docs[0].social.twitter.sentiments;
                     var newCount= Number(currentCount)+1;
                     var newSentiment = Number(currentSentiment)+sentiment;
                       collection.update(
                         {
                           "social.twitter.identifier": eventHandler
-                            
+
                         },
                         {
                           social: {
@@ -157,7 +157,7 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
                           },
                           social: {
                           	twitter:{
-                              sentiment: newSentiment
+                              sentiments: newSentiment
                             }
                           }
                         });
