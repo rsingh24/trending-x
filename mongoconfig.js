@@ -65,7 +65,7 @@ exports.eventlist = function(lon,lat,radius,callback) {
                   if(typeof image == "undefined" || image == null){
                     image="https://static1.squarespace.com/static/553f0636e4b06aaabb2efa9e/t/554a6298e4b00a0f430cb80e/1430938277978/events+La+Boca.jpg?format=1000w";
                   }
-                  strJson += '{"EventName":"' + docs[i].name + '","description":"' +docs[i].description + '","image":"' +image + '","longitude":"' +eventLon + '","latitude":"' +eventLat + '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiments + '","count":"' + docs[i].social.twitter.count + '","category":"' + docs[i].category[0] + '"}';
+                  strJson += '{"EventName":"' + docs[i].name + '","description":"' +docs[i].description + '","image":"' +image + '","longitude":"' +eventLon + '","latitude":"' +eventLat + '","distance":"' +distance+ '","sentiment":"' + Number((docs[i].social.twitter.sentiments).toFixed(1)) + '","count":"' + docs[i].social.twitter.count + '","category":"' + docs[i].category[0] + '"}';
                   i = i + 1;
                   if (i < intCount) {
                     strJson += ',';
