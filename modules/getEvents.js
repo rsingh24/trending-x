@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   var query = require('url').parse(req.url,true).query;
   console.log("I am here 1:"+query.lon);
   console.log("I am here 1:"+query.lat);
-  mongo_data.eventlist(query.lon,query.lat,function(err, eventlist){
+  mongo_data.eventlist(Number(query.lon),Number(query.lat),function(err, eventlist){
     if (!err) {
       /*var strTeam = "",
         i = 0;

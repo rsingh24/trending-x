@@ -18,9 +18,9 @@ exports.eventlist = function(lon,lat,callback) {
         if (!err) {
           collection.find(
             {
-              location: {
+              "location": {
                 	$near: [lon, lat],
-                  $maxDistance: 2/3963.2
+                  $maxDistance: 1
               }
             }
           ).toArray(function(err, docs) {
@@ -43,6 +43,7 @@ exports.eventlist = function(lon,lat,callback) {
               }
             } else {
               console.log("I am here 3");
+              console.log(err);
               onErr(err, callback);
             }
           }); //end collection.find
