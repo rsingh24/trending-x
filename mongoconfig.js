@@ -9,6 +9,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
   db.close();
 });
 exports.eventlist = function(lon,lat,callback) {
+  console.log("I am here 1");
   db.open(function(err, db) {
     if (!err) {
       db.collection('events', function(err, collection) {
