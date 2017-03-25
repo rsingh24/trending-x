@@ -129,16 +129,9 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
     if (!err) {
       db.collection('events', function(err, collection) {
         if (!err) {
-
           collection.find(
-            {
-              social: {
-                	twitter:{
-                    identifier: eventHandler
-
-              }
-            }
-          }).toArray(function(err, docs) {
+            {"social.twitter.identifier": eventHandler})
+            .toArray(function(err, docs) {
             if (!err) {
                 db.close();
                 var intCount = docs.length;
@@ -150,23 +143,7 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
                     var currentSentiment = docs[0].social.twitter.sentiments;
                     var newCount= Number(currentCount)+1;
                     var newSentiment = Number(currentSentiment)+sentiment;
-                      collection.update(
-                        {
-                          "social.twitter.identifier": eventHandler
-
-                        },
-                        {
-                          social: {
-                          	twitter:{
-                              count: newCount
-                            }
-                          },
-                          social: {
-                          	twitter:{
-                              sentiments: newSentiment
-                            }
-                          }
-                        });
+                      updateEvents(eventHandler,newCount,newSentiment);
                 }
               }else {
               console.log("I am here 3");
@@ -174,6 +151,41 @@ exports.updateSentiments = function(eventHandler,sentiment,callback) {
             }
           }); //end collection.find
         } else {
+          onErr(err, callback);
+        }
+      }); //end db.collection
+    } else {
+      onErr(err, callback);
+    }
+  }); // end db.open
+};
+
+
+updateEvents = function(eventHandler,newCount,newSentiment) {
+  console.log('Updating Event');
+  MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(err, db) {
+    if (!err) {
+      db.collection('events', function(err, collection) {
+        if (!err) {
+            collection.update(
+            {
+              "social.twitter.identifier": eventHandler
+
+            },
+            {
+              social: {
+              	twitter:{
+                  count: newCount
+                }
+              },
+              social: {
+              	twitter:{
+                  sentiments: newSentiment
+                }
+              }
+            });
+        }
+         else {
           onErr(err, callback);
         }
       }); //end db.collection
