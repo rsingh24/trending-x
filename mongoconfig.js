@@ -11,7 +11,7 @@ MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(er
   db.close();
 });
 
-exports.eventlist = function(lon,lat,callback) {
+exports.eventlist = function(lon,lat,radius,callback) {
   console.log("I am here 1"+lon+"-------"+lat);
 
   db1.open(function(err, db) {
@@ -24,7 +24,7 @@ exports.eventlist = function(lon,lat,callback) {
                $and : [
                     {location:{
                     	$near: [lon, lat],
-                      $maxDistance: 10
+                      $maxDistance: radius/3963.2
                   }},
                   {
                     $or : [
