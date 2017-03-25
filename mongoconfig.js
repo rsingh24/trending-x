@@ -24,25 +24,25 @@ exports.eventlist = function(lon,lat,callback) {
                $and : [
                     {location:{
                     	$near: [lon, lat],
-                      $maxDistance: 1
+                      $maxDistance: 10
                   }},
                   {
                     $or : [
                     {
                     "date.from":{
-                        $gte: new Date().toISOString()
+                        $lte: new Date().toISOString()
                       }
                     },
                     {
                     "date.to":{
-                        $lte: new Date().toISOString()
+                        $gte: new Date().toISOString()
                       }
                     }
                   ]
                 }
               ]
             }
-          ).toArray(function(err, docs) {
+          ).sort({"social.twitter.count":-1}).toArray(function(err, docs) {
             if (!err) {
               db.close();
               var intCount = docs.length;
@@ -173,16 +173,13 @@ updateEvents = function(eventHandler,newCount,newSentiment) {
 
             },
             {
-              social: {
-              	twitter:{
-                  count: newCount
+              $set:
+
+                {
+                  "social.twitter.count": newCount ,
+                  "social.twitter.sentiments": newSentiment
                 }
-              },
-              social: {
-              	twitter:{
-                  sentiments: newSentiment
-                }
-              }
+
             });
         }
          else {
