@@ -18,9 +18,12 @@ router.get('/', function(req, res, next) {
       }
       strTeam = "<ul>" + strTeam + "</ul>";*/
       //res.render('index', { title: 'Express',events: eventlist });
-      res.json(eventlist);
-    //  res.write(template.build("Test web page on node.js", "Hello there", "<p>The teams in Group " + teamlist.GroupName + " for Euro 2012 are:</p>" + strTeam));
-     res.end();
+      sortEvents(eventlist, 'ayushj151', function (sortedList) {
+
+          res.json(sortedList);
+        //  res.write(template.build("Test web page on node.js", "Hello there", "<p>The teams in Group " + teamlist.GroupName + " for Euro 2012 are:</p>" + strTeam));
+         res.end();
+      });
     } else {
       res.writeHead(200, {
         'Content-Type': 'text/html'
@@ -32,3 +35,35 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
+
+var sortEvents = function(eventList, userId, callback) {
+    mongo_data.getUserPreference(userId, function(primaryIntrests) {
+        if(undefined !== eventList && null !== eventList && undefined !== eventList.events && null !== eventList.events) {
+            eventList.events.sort(function (first, second) {
+                var firstInterest = false;
+                var secondInterest = false;
+                var result = 0;
+                if(null !== primaryIntrests && '' !== primaryIntrests) {
+                    if(undefined !== first.category && null !== first.category && '' !== first.category) {
+                        firstInterest = primaryIntrests.includes(first.category);
+                    }
+                    if(undefined !== second.category && null !== second.category && '' !== first.category) {
+                        secondInterest = primaryIntrests.includes(second.category);
+                    }
+                }
+
+                console.log('Event name1: ' + first.EventName + ' Interest: ' + firstInterest + ' Event name2: ' + second.EventName + ' Interest: ' + secondInterest);
+
+                if(firstInterest && !secondInterest) {
+                    result = -1;
+                } else if(!firstInterest && secondInterest) {
+                    result = 1;
+                } else {
+                    result = second.count - first.count;
+                }
+                return result;
+            });
+        }
+        callback(eventList);
+    });
+};

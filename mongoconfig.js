@@ -2,6 +2,8 @@ var haversine = require('./modules/haversine_v1');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 
+var ObjectId = require('mongodb').ObjectID;
+
 // Use connect method to connect to the Server
 var db1 ;
 MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(err, db) {
@@ -63,7 +65,7 @@ exports.eventlist = function(lon,lat,radius,callback) {
                   if(typeof image == "undefined" || image == null){
                     image="https://static1.squarespace.com/static/553f0636e4b06aaabb2efa9e/t/554a6298e4b00a0f430cb80e/1430938277978/events+La+Boca.jpg?format=1000w";
                   }
-                  strJson += '{"EventName":"' + docs[i].name + '","description":"' +docs[i].description + '","image":"' +image + '","longitude":"' +eventLon + '","latitude":"' +eventLat + '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiments + '","count":"' + docs[i].social.twitter.count + '"}';
+                  strJson += '{"EventName":"' + docs[i].name + '","description":"' +docs[i].description + '","image":"' +image + '","longitude":"' +eventLon + '","latitude":"' +eventLat + '","distance":"' +distance+ '","sentiment":"' + docs[i].social.twitter.sentiments + '","count":"' + docs[i].social.twitter.count + '","category":"' + docs[i].category[0] + '"}';
                   i = i + 1;
                   if (i < intCount) {
                     strJson += ',';
@@ -196,6 +198,35 @@ updateEvents = function(eventHandler,newCount,newSentiment) {
         }
       }); //end db.collection
     } else {
+      onErr(err, callback);
+    }
+  }); // end db.open
+};
+
+exports.getUserPreference = function(userId, callback) {
+  console.log('Getting user preferrences');
+  MongoClient.connect(process.env.MONGOLAB_URI+"?authMode=scram-sha1", function(err, db) {
+    if (!err) {
+      db.collection('users', function(err, collection) {
+        if (!err) {
+            collection.findOne({'_id': userId}, function(err, doc) {
+                var primaryInterestsArray = doc.primaryInterests;
+                var primaryInterests = '';
+                if(undefined !== primaryInterestsArray && null !== primaryInterestsArray) {
+                    for(var i = 0; i < primaryInterestsArray.length; i++) {
+                        primaryInterests += primaryInterestsArray[i];
+                    }
+                }
+                callback(primaryInterests);
+            });
+        }
+        else {
+            console.log(err);
+          onErr(err, callback);
+        }
+      }); //end db.collection
+    } else {
+        console.log(err);
       onErr(err, callback);
     }
   }); // end db.open
