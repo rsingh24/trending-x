@@ -21,19 +21,23 @@ exports.eventlist = function(lon,lat,callback) {
           collection.find(
             {
                $and : [
-                  {location:{
-                  	$near: [lon, lat],
-                    $maxDistance: 1
-                }},
-                {
-                  "date.from":{
-                      $lte: new Date()
+                    {location:{
+                    	$near: [lon, lat],
+                      $maxDistance: 1
+                  }},
+                  {
+                    $or : [
+                    {
+                    "date.from":{
+                        $gte: new Date()
+                      }
+                    },
+                    {
+                    "date.to":{
+                        $lte: new Date()
+                      }
                     }
-                },
-                {
-                  "date.to":{
-                      $gte: new Date()
-                    }
+                  ]
                 }
               ]
             }
