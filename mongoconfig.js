@@ -68,10 +68,12 @@ exports.eventlist = function(lon,lat,callback) {
               }
             } else {
               console.log("I am here 3");
+              console.log("Err" + err);
               onErr(err, callback);
             }
           }); //end collection.find
         } else {
+            console.log(err);
           onErr(err, callback);
         }
       }); //end db.collection

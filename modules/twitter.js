@@ -1,7 +1,7 @@
 'use strict';
 
-var Twitter = require('twitter');
-var client = new Twitter({
+const Twitter = require('twitter');
+const client = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
@@ -13,25 +13,30 @@ const NLP = require('google-nlp');
 const apiKey = process.env.GOOGLE_NLP_KEY;
 var nlp = new NLP(apiKey);
 
-/**
- * Stream statuses filtered by keyword
- * number of tweets per second depends on topic popularity
- **/
-client.stream('statuses/filter', {track: '#trendingx'},  function(stream) {
-  stream.on('data', function(tweet) {
-    console.log(tweet.text);
+const mongoConfig = require('../mongoconfig');
 
-    nlp.analyzeSentiment( tweet.text )
-	.then(function( sentiment ) {
-		console.log( 'Sentiment:', sentiment );
-	})
-	.catch(function( error ) {
-		console.log( 'Error:', error.message );
-	})
+module.exports = {
+    streamAllHandles: function() {
+        
+    }
+};
 
-  });
+var streamHandle = function(handle) {
+    client.stream('statuses/filter', {track: handle},  function(stream) {
 
-  stream.on('error', function(error) {
-    console.log(error);
-  });
-});
+        stream.on('data', function(tweet) {
+            console.log(tweet.text);
+            nlp.analyzeSentiment(tweet.text)
+        	.then(function( sentiment ) {
+        		console.log( 'Sentiment:', sentiment );
+        	})
+        	.catch(function( error ) {
+        		console.log( 'Error:', error.message );
+        	})
+      });
+
+      stream.on('error', function(error) {
+        console.log(error);
+      });
+    });
+};
