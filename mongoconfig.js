@@ -89,6 +89,7 @@ exports.eventlist = function(lon,lat,radius,callback) {
         }
       }); //end db.collection
     } else {
+        console.log(err);
       onErr(err, callback);
     }
   }); // end db.open
