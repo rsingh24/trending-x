@@ -30,12 +30,12 @@ exports.eventlist = function(lon,lat,callback) {
                     $or : [
                     {
                     "date.from":{
-                        $gte: "2017-03-21T20:05:21.641Z"
+                        $gte: new Date().toISOString()
                       }
                     },
                     {
                     "date.to":{
-                        $lte: "2017-03-27T20:05:21.641Z"
+                        $lte: new Date().toISOString()
                       }
                     }
                   ]
