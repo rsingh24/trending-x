@@ -2,15 +2,17 @@ var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 
 // Use connect method to connect to the Server
+var db1 ;
 MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
   assert.equal(null, err);
   console.log("Connected correctly to server");
-
+  db1=db;
   db.close();
 });
+
 exports.eventlist = function(lon,lat,callback) {
   console.log("I am here 1");
-  db.open(function(err, "heroku_hml06j14") {
+  db.open(function(err, db1) {
     if (!err) {
       db.collection('events', function(err, collection) {
         if (!err) {
